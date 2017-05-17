@@ -1,8 +1,21 @@
 # What is this?
 
-This is a simple demonstration of how to log console and debug messages to a file, while having them also appear in the terminal.
+This is a simple node demonstration of how to log console and debug messages to a file, while having them also appear in the terminal.
 
 The reason we'd like to to do is because we want to be able to use [papertrail's](http://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-nodejs-apps/) daemon to log messages to a centralised service.
+
+
+## Installation
+
+	npm install
+
+
+## Usage
+
+	npm run
+
+
+## Description
 
 This demo runs a simple express server, where a `logging.js` module is used to provide winston transports to log console messages to a file, and then call the original console globals to log the messages to the terminal.
 
@@ -26,5 +39,3 @@ end up in the `logs/default.log` file.
 
 Similary, any `console.log`, `console.info`, `console.warn`, or `console.error` messages
 will also be routed to the `logs/default.log` file.
-
-
