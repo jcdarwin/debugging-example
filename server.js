@@ -1,9 +1,8 @@
-var debug = require('debug')
-var express = require('express')
-var log = debug('app:server')
-var os = require("os");
+const debug = require('debug')
+const express = require('express')
+const os = require("os");
 
-var app = express()
+const app = express()
 
 console.log('process.env.DEBUG: %s', process.env.DEBUG)
 
@@ -11,6 +10,10 @@ console.log('process.env.DEBUG: %s', process.env.DEBUG)
 // We can trigger debug by specifying DEBUG=app:* or DEBUG=app:server
 if (/app:server|app:\*/.test(process.env.DEBUG)) {
 	debug.enable(process.env.DEBUG)
+}
+
+const log = (message) => {
+	debug('app:server')(`${os.hostname()}: ${message}`)
 }
 
 // A GET to demonstrate the debugging status
@@ -29,11 +32,13 @@ app.post('/', function (req, res) {
   console.log('X-DEBUG: %s', debugHeader || 'no value supplied')
 
   if (debugHeader) {
+	// Enable debug using a suitable POST request:
     // curl -X POST -H "x-DEBUG: app:server" http://localhost:9000/
 	debug.enable(debugHeader)
 	message = `Debugging of ${debugHeader} enabled on ${os.hostname()}`
 	log(message)
   } else {
+	// Disable debug using a suitable POST request:
 	// curl -X POST -H "x-DEBUG:" http://localhost:9000/
 	log('Disabling debugging on %s', os.hostname())
 	debug.disable()
