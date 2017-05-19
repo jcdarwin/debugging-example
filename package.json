@@ -7,15 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "#start": "nohup node server.js > app.log &",
     "##start": "node server.js > app.log 2>&1",
-    "start": "DEBUG=app,express:* DEBUG_COLORS=false node server.js",
-    "start:prod": "DEBUG=app,express:* DEBUG_COLORS=false NODE_ENV=production node server.js"
+    "start": "node server.js",
+    "start:prod": "DEBUG=app:*,express:* DEBUG_COLORS=true NODE_ENV=production node server.js"
   },
   "keywords": [],
   "author": "Jason Darwin",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.17.2",
+    "debug": "git+https://github.com/visionmedia/debug.git#ae88bce465d556cfe441934998594dae33c58182",
     "express": "^4.15.2",
-    "winston": "^2.3.1",
-    "debug": "^2.6.7"
-  },
+    "os": "^0.1.1"
+  }
 }

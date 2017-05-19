@@ -1,8 +1,8 @@
 # What is this?
 
-This is a simple node demonstration of how to log console and debug messages to a file, while having them also appear in the terminal.
+This is a simple node demonstration of how to enable / disable debugging using the [upcoming v3 release of the debug module](https://github.com/visionmedia/debug.git#ae88bce465d556cfe441934998594dae33c58182).
 
-The reason we'd like to to do is because we want to be able to use [papertrail's](http://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-nodejs-apps/) daemon to log messages to a centralised service.
+Note that the version of debug at this cmomit is reported as 2.6.3, but that's just because it's not been updated.
 
 
 ## Installation
@@ -12,30 +12,23 @@ The reason we'd like to to do is because we want to be able to use [papertrail's
 
 ## Usage
 
-	npm run
+	npm start
 
 
 ## Description
 
-This demo runs a simple express server, where a `logging.js` module is used to provide winston transports to log console messages to a file, and then call the original console globals to log the messages to the terminal.
+This demo runs a simple express server, which displays whether or not debugging is enabled for the app at http://localhost:9000/
 
-Note that we can also use the [winston-papertrail](https://github.com/kenperkins/winston-papertrail) library to provide a transport to send log information directly to papertrail (in which case we may not need to log to the file).
+Once the app is started, to enable debugging:
 
-In the `package.json` we then ensure that `debug` generates messages by specifying `app` in the `DEBUG` environment variable:
+	curl -X POST -H "x-DEBUG: app:server" http://localhost:9000/
 
-	"start": "DEBUG=app,express:* DEBUG_COLORS=false node server.js",
+You'll the be able to see the debugging status at http://localhost:9000/, and see simple debug messages in the terminal.
 
-In `server.js` we require `debug`, and identify our application as `app`:
+To disable debugging:
 
-	var debug = require('debug')('app')
+	curl -X POST -H "x-DEBUG:" http://localhost:9000/
 
+Note that if the `DEBUG` environment variable is set at runtime, debugging will be set accordingly:
 
-By binding `debug.log` to `console.info`, we direct debug output to console:
-
-	debug.log = console.info.bind(console);
-
-Because we've overriden console in our logging module, debug output will therefore
-end up in the `logs/default.log` file.
-
-Similary, any `console.log`, `console.info`, `console.warn`, or `console.error` messages
-will also be routed to the `logs/default.log` file.
+	"start:prod": "DEBUG=app:*,express:* node server.js"
