@@ -1,6 +1,6 @@
 const debug = require('debug')
 const express = require('express')
-const os = require("os");
+const hostname = require("os").hostname()
 
 const app = express()
 
@@ -13,19 +13,19 @@ if (/app:server|app:\*/.test(process.env.DEBUG)) {
 }
 
 const log = (message) => {
-	debug('app:server')(`${os.hostname()}: ${message}`)
+	debug('app:server')(`${hostname}: ${message}`)
 }
 
 // A GET to demonstrate the debugging status
 app.get('/', function (req, res) {
-  const message = `Debugging on ${os.hostname()} is ${debug.enabled('app:server') ? 'enabled' : 'not enabled'}`
+  const message = `Debugging on ${hostname} is ${debug.enabled('app:server') ? 'enabled' : 'not enabled'}`
   console.log(message)
   log(message)
 
   res.send(`Hello World!<br />${message}`)
 })
 
-// A POST to enable / disable debugging
+// A POST to demonstrate enabling / disabling debugging
 app.post('/', function (req, res) {
   let message
   const debugHeader = req.get('X-DEBUG')
@@ -35,14 +35,14 @@ app.post('/', function (req, res) {
 	// Enable debug using a suitable POST request:
     // curl -X POST -H "x-DEBUG: app:server" http://localhost:9000/
 	debug.enable(debugHeader)
-	message = `Debugging of ${debugHeader} enabled on ${os.hostname()}`
+	message = `Debugging of ${debugHeader} enabled on ${hostname}`
 	log(message)
   } else {
 	// Disable debug using a suitable POST request:
 	// curl -X POST -H "x-DEBUG:" http://localhost:9000/
-	log('Disabling debugging on %s', os.hostname())
+	log('Debugging disabled on %s', hostname)
 	debug.disable()
-	message = `Debugging disabled on ${os.hostname()}`
+	message = `Debugging disabled on ${hostname}`
 	console.log(message)
 	log('You should not see this message!')
   }
